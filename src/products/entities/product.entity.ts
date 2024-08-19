@@ -11,8 +11,11 @@ export class Product {
   @Column()
   description: string;
 
-  @Column('decimal')
+  @Column('decimal', { precision: 10, scale: 2 })
   price: number;
+
+  @Column()
+  discountPercentage: number;
 
   @Column()
   size: string;
@@ -20,15 +23,15 @@ export class Product {
   @Column()
   color: string;
 
-  @Column()
-  imageUrl: string;
+  @Column('simple-array')
+  imageUrls: string[];
 
   @Column({ default: true })
   isAvailable: boolean;
 
-  @CreateDateColumn()
-  created_at: Date;
+  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  createdAt: Date;
 
-  @UpdateDateColumn()
-  modified_at: Date;
+  @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  updatedAt: Date;
 }

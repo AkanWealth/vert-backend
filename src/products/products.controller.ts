@@ -10,31 +10,31 @@ export class ProductsController {
 
   @UseGuards(JwtAuthGuard)
   @Post()
-  create(@Body() createProductDto: CreateProductDto) {
-    return this.productsService.create(createProductDto);
+  async create(@Body() createProductDto: CreateProductDto):Promise<any> {
+    return await this.productsService.create(createProductDto);
   }
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Get()
-  findAll() {
-    return this.productsService.findAll();
+  async findAll(): Promise<any> {
+    return await this.productsService.findAll();
   }
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Get(':id')
-  findOne(@Param('id') id: number) {
-    return this.productsService.findOne(id);
+  async findOne(@Param('id') id: number): Promise<any> {
+    return await this.productsService.findOne(id);
   }
 
   @UseGuards(JwtAuthGuard)
   @Put(':id')
-  update(@Param('id') id: number, @Body() updateProductDto: UpdateProductDto) {
-    return this.productsService.update(id, updateProductDto);
+  async update(@Param('id') id: number, @Body() updateProductDto: UpdateProductDto): Promise<any> {
+    return await this.productsService.update(id, updateProductDto);
   }
 
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  remove(@Param('id') id: number) {
-    return this.productsService.remove(id);
+  async remove(@Param('id') id: number): Promise<any> {
+    return await this.productsService.remove(id);
   }
 }
