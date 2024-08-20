@@ -1,9 +1,44 @@
+import { IsNotEmpty, IsNumber, IsString, IsArray, IsBoolean, IsOptional } from 'class-validator';
+
 export class CreateProductDto {
-  readonly name: string;
-  readonly description: string;
-  readonly price: number;
-  readonly size: string;
-  readonly color: string;
-  readonly imageUrl: string;
-  readonly isAvailable: boolean;
+  @IsString()
+  @IsNotEmpty()
+  name: string;
+
+  @IsString()
+  @IsNotEmpty()
+  description: string;
+
+  @IsString()
+  @IsNotEmpty()
+  section: string;
+
+  @IsString()
+  @IsNotEmpty()
+  category: string;
+
+  @IsArray()
+  @IsString({ each: true })
+  tags: string[];
+
+  @IsNumber()
+  price: number;
+
+  @IsNumber()
+  @IsOptional()
+  discountPercentage?: number;
+
+  @IsString()
+  size: string;
+
+  @IsString()
+  color: string;
+
+  @IsArray()
+  @IsString({ each: true })
+  imageUrls: string[];
+
+  @IsBoolean()
+  @IsOptional()
+  isAvailable?: boolean;
 }

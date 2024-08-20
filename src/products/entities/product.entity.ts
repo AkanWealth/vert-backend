@@ -11,10 +11,19 @@ export class Product {
   @Column()
   description: string;
 
+  @Column()
+  section: string;
+
+  @Column()
+  category: string;
+
+  @Column('simple-array')
+  tags: string[];
+
   @Column('decimal', { precision: 10, scale: 2 })
   price: number;
 
-  @Column()
+  @Column('decimal', { precision: 5, scale: 2, default: 0 })
   discountPercentage: number;
 
   @Column()

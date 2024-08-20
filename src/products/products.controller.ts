@@ -1,17 +1,46 @@
-import { Controller, Get, Post, Body, Param, Delete, Put, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Put, UseGuards, HttpCode, BadRequestException, UploadedFiles, HttpStatus, UseInterceptors } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { MulterConfigService } from 'src/config/multer.config';
+import { FilesInterceptor } from '@nestjs/platform-express';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('products')
 export class ProductsController {
-  constructor(private readonly productsService: ProductsService) {}
+  constructor(
+    private readonly productsService: ProductsService,
+    private readonly configService: ConfigService,
+  ) {}
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
+  // @Post()
+  // async create(@Body() createProductDto: CreateProductDto):Promise<any> {
+  //   return await this.productsService.create(createProductDto);
+  // }
+
   @Post()
-  async create(@Body() createProductDto: CreateProductDto):Promise<any> {
-    return await this.productsService.create(createProductDto);
+  @HttpCode(HttpStatus.CREATED)
+  @UseInterceptors(FilesInterceptor('images', 10, new MulterConfigService().createMulterOptions()))
+  async create(
+    @Body() createProductDto: CreateProductDto,
+    @UploadedFiles() files: Express.Multer.File[]
+  ): Promise<any> {
+    if (!files || files.length === 0) {
+      console.log("No files uploaded")
+      throw new BadRequestException('No files uploaded');
+    }
+
+    const baseUrl = this.configService.get<string>('BASE_URL');
+    const imageUrls = files.map(file => `${baseUrl}/${file.filename}`);
+
+    const productData = {
+      ...createProductDto,
+      imageUrls,
+    };
+
+    return await this.productsService.create(productData);
   }
 
   // @UseGuards(JwtAuthGuard)
