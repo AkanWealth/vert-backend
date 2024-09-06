@@ -34,9 +34,12 @@ export class CreateProductDto {
   @IsString()
   color: string;
 
-  @IsArray()
-  @IsString({ each: true })
-  imageUrls: string[];
+  // @IsArray()
+  // @IsString({ each: true })
+  // imageUrls: string[];
+
+  @IsString()
+  imageUrls: string;
 
   @IsBoolean()
   @IsOptional()

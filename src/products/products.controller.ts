@@ -15,33 +15,36 @@ export class ProductsController {
   ) {}
 
   // @UseGuards(JwtAuthGuard)
-  // @Post()
-  // async create(@Body() createProductDto: CreateProductDto):Promise<any> {
-  //   return await this.productsService.create(createProductDto);
-  // }
-
   @Post()
-  @HttpCode(HttpStatus.CREATED)
-  @UseInterceptors(FilesInterceptor('images', 10, new MulterConfigService().createMulterOptions()))
-  async create(
-    @Body() createProductDto: CreateProductDto,
-    @UploadedFiles() files: Express.Multer.File[]
-  ): Promise<any> {
-    if (!files || files.length === 0) {
-      console.log("No files uploaded")
-      throw new BadRequestException('No files uploaded');
-    }
-
-    const baseUrl = this.configService.get<string>('BASE_URL');
-    const imageUrls = files.map(file => `${baseUrl}/${file.filename}`);
-
-    const productData = {
-      ...createProductDto,
-      imageUrls,
-    };
-
-    return await this.productsService.create(productData);
+  async create(@Body() createProductDto: CreateProductDto):Promise<any> {
+    console.log("createProductDto", createProductDto)
+   const product = await this.productsService.create(createProductDto);
+   console.log("return product", product)
+   return product
   }
+
+  // @Post()
+  // @HttpCode(HttpStatus.CREATED)
+  // @UseInterceptors(FilesInterceptor('images', 10, new MulterConfigService().createMulterOptions()))
+  // async create(
+  //   @Body() createProductDto: CreateProductDto,
+  //   @UploadedFiles() files: Express.Multer.File[]
+  // ): Promise<any> {
+  //   if (!files || files.length === 0) {
+  //     console.log("No files uploaded")
+  //     throw new BadRequestException('No files uploaded');
+  //   }
+
+  //   const baseUrl = this.configService.get<string>('BASE_URL');
+  //   const imageUrls = files.map(file => `${baseUrl}/${file.filename}`);
+
+  //   const productData = {
+  //     ...createProductDto,
+  //     imageUrls,
+  //   };
+
+  //   return await this.productsService.create(productData);
+  // }
 
   // @UseGuards(JwtAuthGuard)
   @Get()

@@ -17,6 +17,9 @@ export class Product {
   @Column()
   category: string;
 
+  @Column({ nullable: true })
+  subCategory: string;
+
   @Column('simple-array')
   tags: string[];
 
@@ -32,8 +35,10 @@ export class Product {
   @Column()
   color: string;
 
-  @Column('simple-array')
-  imageUrls: string[];
+  // @Column('simple-array')
+  // imageUrls: string[];
+  @Column({nullable: true})
+  imageUrl: string;
 
   @Column({ default: true })
   isAvailable: boolean;
